@@ -72,7 +72,7 @@ function LoginPage() {
     
     const handleLogin = async () => {
         try {
-            const response = await fetch('http://localhost:5000/login', {
+            const response = await fetch('https://animated-waddle-qjg7pvjx7gp2xw6w-5000.app.github.dev/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
