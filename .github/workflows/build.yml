@@ -2,7 +2,7 @@ name: Build
 on:
   push:
     branches:
-      - develop #Rama develop
+      - develop #Rama develop indicada
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
