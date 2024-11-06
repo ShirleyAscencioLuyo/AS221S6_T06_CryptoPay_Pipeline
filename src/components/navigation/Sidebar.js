@@ -27,10 +27,10 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="profile">
-        <img 
-          src={require('../../assets/profilePerson.png')} 
-          alt="User Avatar" 
-          className="profile-pic" 
+        <img
+          src={require('../../assets/profilePerson.png')}
+          alt="User Avatar"
+          className="profile-pic"
         />
         <p className="role">ENCARGADO</p>
         <h3 className="name">Usuario</h3>
@@ -43,11 +43,22 @@ const Sidebar = () => {
         <Link to="/rewards" className="menu-item"><FaAward className="icon" /> Recompensas</Link>
         <Link to="/route-monitoring" className="menu-item"><FaTachometerAlt className="icon" /> Monitoreo de Ruta</Link>
         <Link to="/schedules" className="menu-item"><FaClock className="icon" /> Horarios</Link>
-        
-        <div className="menu-item" onClick={handleSettingsSubMenuToggle}>
+
+        <div
+          className="menu-item"
+          onClick={handleSettingsSubMenuToggle}
+          role="button"
+          tabIndex="0"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              handleSettingsSubMenuToggle();
+            }
+          }}
+        >
           <FaCog className="icon" /> Configuración
           <span className="arrow">{showSettingsSubMenu ? "▲" : "▼"}</span>
         </div>
+
         {showSettingsSubMenu && (
           <div className="sub-menu">
             <Link to="/profile" className="sub-menu-item">Perfil</Link>
