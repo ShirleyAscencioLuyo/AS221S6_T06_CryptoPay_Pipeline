@@ -60,6 +60,11 @@ const loginSchema = Joi.object({
     metamaskAddress: Joi.string().alphanum().length(42).required() // Dirección de Metamask debe ser alfanumérica y tener 42 caracteres.
 });
 
+// Función para desinfectar y validar la entrada del usuario
+function sanitizeInput(input) {
+    return input.replace(/[^a-zA-Z0-9]/g, ''); // Reemplaza cualquier carácter no alfanumérico
+}
+
 // Iniciar sesión
 app.post('/login', async (req, res) => {
     // Validar los datos de entrada
@@ -68,7 +73,8 @@ app.post('/login', async (req, res) => {
         return res.status(400).json({ message: 'Datos de entrada inválidos' });
     }
 
-    const { metamaskAddress } = req.body;
+    let { metamaskAddress } = req.body;
+    metamaskAddress = sanitizeInput(metamaskAddress);  // Sanear la entrada
 
     try {
         // Verifica si el usuario existe en la base de datos
