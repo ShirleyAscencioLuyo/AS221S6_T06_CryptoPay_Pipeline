@@ -76,7 +76,7 @@ app.post('/login', async (req, res) => {
     }
 
     try {
-        const user = await User.findOne({ metamaskAddress });
+        const user = await User.findOne({ metamaskAddress: metamaskAddress.trim() });
         if (!user) {
             return res.status(404).json({ message: 'Usuario no encontrado' });
         }
@@ -100,14 +100,15 @@ app.post('/routes', async (req, res) => {
     }
 
     try {
-        const user = await User.findOne({ metamaskAddress });
+        const sanitizedAddress = metamaskAddress.trim();
+        const user = await User.findOne({ metamaskAddress: sanitizedAddress });
         if (!user) {
             return res.status(404).json({ message: 'Usuario no encontrado' });
         }
 
         const newRoute = new Route({
             title,
-            contractorAddress: metamaskAddress,
+            contractorAddress: sanitizedAddress,
             destination,
             time,
             price
@@ -141,7 +142,8 @@ app.get('/user/:metamaskAddress', async (req, res) => {
     }
 
     try {
-        const user = await User.findOne({ metamaskAddress });
+        const sanitizedAddress = metamaskAddress.trim();
+        const user = await User.findOne({ metamaskAddress: sanitizedAddress });
         if (!user) {
             return res.status(404).json({ message: 'Usuario no encontrado' });
         }
@@ -162,8 +164,9 @@ app.put('/users/:metamaskAddress', async (req, res) => {
     }
 
     try {
+        const sanitizedAddress = metamaskAddress.trim();
         const user = await User.findOneAndUpdate(
-            { metamaskAddress },
+            { metamaskAddress: sanitizedAddress },
             { firstName, lastName, email },
             { new: true }
         );
