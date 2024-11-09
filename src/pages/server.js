@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -9,7 +10,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(bodyParser.json());
 
-const mongoUri = 'mongodb+srv://gabrielgutierrezq:rlM9Eq5qjWA7S268@artemio.uowgugn.mongodb.net/ARTEMIO?retryWrites=true&w=majority';
+const mongoUri = process.env.MONGO_URI;
 
 mongoose.connect(mongoUri, {
     useNewUrlParser: true,
@@ -30,7 +31,6 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User', userSchema);
 
-// Esquema y modelo de Route
 const routeSchema = new mongoose.Schema({
     title: String,
     contractorAddress: String,
@@ -40,6 +40,8 @@ const routeSchema = new mongoose.Schema({
     price: Number
 });
 const Route = mongoose.model('Route', routeSchema);
+
+const isValidAddress = (address) => typeof address === 'string' && /^0x[a-fA-F0-9]{40}$/.test(address);
 
 // Endpoint para registrar usuario
 app.post('/register', async (req, res) => {
@@ -69,6 +71,10 @@ app.post('/register', async (req, res) => {
 app.post('/login', async (req, res) => {
     const { metamaskAddress } = req.body;
 
+    if (!isValidAddress(metamaskAddress)) {
+        return res.status(400).json({ message: 'Dirección de Metamask no válida' });
+    }
+
     try {
         const user = await User.findOne({ metamaskAddress });
         if (!user) {
@@ -87,7 +93,11 @@ app.post('/login', async (req, res) => {
 
 // Endpoint para crear rutas
 app.post('/routes', async (req, res) => {
-    const { title, destination, time, price, metamaskAddress} = req.body;
+    const { title, destination, time, price, metamaskAddress } = req.body;
+
+    if (!isValidAddress(metamaskAddress)) {
+        return res.status(400).json({ message: 'Dirección de Metamask no válida' });
+    }
 
     try {
         const user = await User.findOne({ metamaskAddress });
@@ -122,9 +132,13 @@ app.get('/routes', async (req, res) => {
     }
 });
 
-// Endpoint para obtener todos los usuarios
+// Endpoint para obtener un usuario por dirección de Metamask
 app.get('/user/:metamaskAddress', async (req, res) => {
     const { metamaskAddress } = req.params;
+
+    if (!isValidAddress(metamaskAddress)) {
+        return res.status(400).json({ message: 'Dirección de Metamask no válida' });
+    }
 
     try {
         const user = await User.findOne({ metamaskAddress });
@@ -142,6 +156,10 @@ app.get('/user/:metamaskAddress', async (req, res) => {
 app.put('/users/:metamaskAddress', async (req, res) => {
     const { metamaskAddress } = req.params;
     const { firstName, lastName, email } = req.body;
+
+    if (!isValidAddress(metamaskAddress)) {
+        return res.status(400).json({ message: 'Dirección de Metamask no válida' });
+    }
 
     try {
         const user = await User.findOneAndUpdate(

@@ -39,7 +39,7 @@ const PurchasesPage = () => {
     // Llamada a la API para obtener las rutas
     const fetchRoutes = async () => {
       try {
-        const response = await fetch("http://localhost:5000/routes");
+        const response = await fetch("https://animated-barnacle-764vp76xw5v2p97q-5000.app.github.dev/routes");
         const data = await response.json();
         setRoutes(data);
       } catch (error) {

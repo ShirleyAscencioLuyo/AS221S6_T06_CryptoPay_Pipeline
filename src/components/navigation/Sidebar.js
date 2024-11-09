@@ -144,15 +144,19 @@ const Sidebar = () => {
         )}
 
         <Link to="/purchases" className="menu-item"><FaTicketAlt className="icon" /> Compras de Pasaje</Link>
-        {/* <Link to="/transaction-details" className="menu-item"><FaListAlt className="icon" /> Detalles de la Transacción</Link> */}
-        {/* <Link to="/rewards" className="menu-item"><FaAward className="icon" /> Recompensas</Link> */}
-        {/* <Link to="/route-monitoring" className="menu-item"><FaTachometerAlt className="icon" /> Monitoreo de Ruta</Link> */}
-        {/* <Link to="/schedules" className="menu-item"><FaClock className="icon" /> Horarios</Link> */}
 
-        <div className="menu-item" onClick={handleSettingsSubMenuToggle}>
+        <div
+          className="menu-item"
+          onClick={handleSettingsSubMenuToggle}
+          onKeyDown={(e) => e.key === 'Enter' && handleSettingsSubMenuToggle()}
+          role="button"
+          tabIndex={0}
+          aria-expanded={showSettingsSubMenu}
+        >
           <FaCog className="icon" /> Configuración
           <span className="arrow">{showSettingsSubMenu ? "▲" : "▼"}</span>
         </div>
+
         {showSettingsSubMenu && (
           <div className="sub-menu">
             <Link to="/profile" className="sub-menu-item">Perfil</Link>
