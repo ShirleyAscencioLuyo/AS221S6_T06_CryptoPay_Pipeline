@@ -76,7 +76,8 @@ app.post('/login', async (req, res) => {
     }
 
     try {
-        const user = await User.findOne({ metamaskAddress: metamaskAddress.trim() });
+        const sanitizedAddress = metamaskAddress.trim();
+        const user = await User.findOne({ metamaskAddress: sanitizedAddress });
         if (!user) {
             return res.status(404).json({ message: 'Usuario no encontrado' });
         }
