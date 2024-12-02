@@ -2,7 +2,7 @@ name: Build
 on:
   push:
     branches:
-      - develop #Rama de evaluación develop.
+      - develop #Indicamos la de evaluación develop.
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
